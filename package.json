@@ -1,0 +1,26 @@
+{
+  "name": "untitled",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "close": "pkill myServer",
+    "server": "PORT=3000 nodemon --watch ./server ./server/index.js ",
+    "server:restart": "yarn close && yarn server",
+    "cli": "node ./client/index.js",
+    "client": "PORT=3000 nodemon --watch ./client ./client/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2",
+    "ws": "^7.2.1"
+  },
+  "dependencies": {
+    "rxjs": "^6.5.4"
+  }
+}
