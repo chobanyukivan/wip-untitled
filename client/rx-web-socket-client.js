@@ -1,25 +1,23 @@
 global.WebSocket = require('ws')
 
-const {WebSocketSubject} = require('rxjs/webSocket');
-const {timer, Subject, BehaviorSubject, interval} = require("rxjs");
-const {startWith, takeWhile, take } = require("rxjs/operators");
-const {map} = require("rxjs/operators");
+const { WebSocketSubject } = require('rxjs/webSocket');
+const { Subject, BehaviorSubject, interval} = require("rxjs");
+const { takeWhile, take } = require("rxjs/operators");
 
 class RxWebSocketClientSubject extends Subject {
     socket$;
 
     connection$;
 
-    constructor(url = "ws://localhost:3000", name) {
+    constructor(name, url, port) {
         super();
 
-        // this.url = url || "ws://localhost:8999";
         this.name = name || Date.now();
 
         this.connection$ = new BehaviorSubject({ isConnected: false })
 
         this.webSocketSubjectConfig = {
-            url,
+            url: `${url}:${port}`,
             openObserver: {
                 next: () => {
                     this.connection$.next({ isConnected: true})
@@ -42,20 +40,18 @@ class RxWebSocketClientSubject extends Subject {
             this.socket$.pipe(take(5)).subscribe(
                 ({msg}) => {
                     console.log('message received: ' + msg)
-                    // wsClient$.complete()
                 },
                 err => {
                     console.log(err.message)
                 },
                 () => console.log('complete')
-            )
+            );
 
             this.socket$.next({
                 msg: `I'm client ${this.name }`,
                 clientId: this.name,
-            })
+            });
 
-            // this.connection$.subscribe()
             this.connection$.pipe(take(1)).subscribe(({ isConnected }) => {
                 // console.log('connection$', isConnected)
                 if (!isConnected) {
@@ -73,7 +69,7 @@ class RxWebSocketClientSubject extends Subject {
             .pipe(takeWhile(() => { return !this.socket$ }))
         this.reconnection$.subscribe( ()=> {
             this.connect()
-        } )
+        })
     }
 
     // close = () => {
@@ -83,4 +79,4 @@ class RxWebSocketClientSubject extends Subject {
     // }
 }
 
-module.exports = RxWebSocketClientSubject
+module.exports = RxWebSocketClientSubject;

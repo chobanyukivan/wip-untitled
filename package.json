@@ -10,7 +10,7 @@
     "server": "PORT=3000 nodemon --watch ./server ./server/index.js ",
     "server:restart": "yarn close && yarn server",
     "cli": "node ./client/index.js",
-    "client": "PORT=3000 nodemon --watch ./client ./client/index.js"
+    "client": "nodemon --watch ./client ./client/index.js"
   },
   "keywords": [],
   "author": "",
